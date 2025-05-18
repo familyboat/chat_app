@@ -33,7 +33,7 @@ export class GitHubApi {
   }> {
     const response = await fetch("https://api.github.com/user", {
       headers: {
-        Authorization: `token ${accessToken},`,
+        Authorization: `Bearer ${accessToken},`,
       },
     });
     if (!response.ok) {

@@ -1,6 +1,4 @@
-import { useSignal } from "@preact/signals";
 import { define } from "../utils.ts";
-import Counter from "../islands/Counter.tsx";
 import { getCookies, setCookie } from "@std/http";
 import { page } from "fresh";
 import { gitHubApi } from "../communication/github.ts";
@@ -40,7 +38,6 @@ export const handler = define.handlers(async (ctx) => {
 
 export default define.page(function Home({ data }) {
   console.log(data);
-  const count = useSignal(3);
 
   return (
     <>
