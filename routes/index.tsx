@@ -14,7 +14,7 @@ export const handler = define.handlers(async (ctx) => {
   const url = new URL(ctx.req.url);
   const code = url.searchParams.get("code");
   if (!code) {
-    return page(null);
+    return page(false);
   }
 
   const accessToken = await gitHubApi.getAccessToken(code);
@@ -27,7 +27,7 @@ export const handler = define.handlers(async (ctx) => {
     maxAge: 60 * 60 * 24 * 7,
     httpOnly: true,
   });
-
+console.log({...headers})
   return page(null, {
     headers: {
       ...headers
