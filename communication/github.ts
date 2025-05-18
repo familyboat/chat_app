@@ -1,3 +1,5 @@
+import {Octokit} from "octokit";
+
 export class GitHubApi {
   async getAccessToken(code: string): Promise<string> {
     const response = await fetch(
@@ -31,15 +33,15 @@ export class GitHubApi {
     userName: string;
     avatarUrl: string;
   }> {
-    const response = await fetch("https://api.github.com/user", {
-      headers: {
-        Authorization: `Bearer ${accessToken},`,
-      },
+    const octokit = new Octokit({
+      auth: accessToken,
     });
-    if (!response.ok) {
-      throw new Error(await response.text());
+    const response = await octokit.request('GET /user');
+    if (response.status !== 200) {
+      throw new Error(`Get user data failed: ${response.status}`)
     }
-    const userData = await response.json();
+    const userData = response.data;
+
     return {
       userId: userData.id,
       userName: userData.login,

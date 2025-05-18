@@ -17,7 +17,6 @@ export const handler = define.handlers(async (ctx) => {
     return page(null);
   }
 
-  console.log(code);
   const accessToken = await gitHubApi.getAccessToken(code);
   const userData = await gitHubApi.getUserData(accessToken);
 
@@ -37,8 +36,6 @@ export const handler = define.handlers(async (ctx) => {
 });
 
 export default define.page(function Home({ data }) {
-  console.log(data);
-
   return (
     <>
       <img
