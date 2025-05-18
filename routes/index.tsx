@@ -2,12 +2,21 @@ import { define } from "../utils.ts";
 import { getCookies, setCookie } from "@std/http";
 import { page } from "fresh";
 import { gitHubApi } from "../communication/github.ts";
+import { databaseLoader } from "../communication/database.ts";
+import twas from "twas";
 
 export const handler = define.handlers(async (ctx) => {
   // Get cookie from request header and parse it
   const maybeAccessToken = getCookies(ctx.req.headers)["deploy_chat_token"];
+  const database = await databaseLoader.getInstance();
   if (maybeAccessToken) {
-    return page(null);
+    const user = await database.getUserByAccessToken(maybeAccessToken);
+    if (user) {
+      return page({
+        rooms: await database.getRooms(),
+        url: ctx.url
+      })
+    }
   }
 
   // This is an oauth callback request
@@ -20,6 +29,13 @@ export const handler = define.handlers(async (ctx) => {
   const accessToken = await gitHubApi.getAccessToken(code);
   const userData = await gitHubApi.getUserData(accessToken);
 
+  await database.insertUser({
+    userId: userData.userId,
+    userName: userData.userName,
+    accessToken,
+    avatarUrl: userData.avatarUrl,
+  })
+
   const headers = new Headers();
   setCookie(headers, {
     name: "deploy_chat_token",
@@ -28,14 +44,17 @@ export const handler = define.handlers(async (ctx) => {
     httpOnly: true,
   });
 
-  return page(null, {
+  return page({
+    rooms: await database.getRooms(),
+    url: ctx.url,
+  }, {
     headers: {
       "Set-Cookie": headers.get("Set-Cookie")!
     }
   });
 });
 
-export default define.page(function Home({ data }) {
+export default define.page<typeof handler>(function Home({ data }) {
   return (
     <>
       <img
@@ -70,11 +89,11 @@ export default define.page(function Home({ data }) {
               {" + "}
               <a
                 class="font-bold underline"
-                href="https://deno.com/kv"
+                href="https://supabase.com"
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                Deno kv
+                Supabase
               </a>
               {" + "}
               <a
@@ -97,7 +116,54 @@ export default define.page(function Home({ data }) {
               on Deno Deploy.
             </span>
           </div>
-          {data == null && (
+          {
+            data 
+            ? (
+              <ul
+                role="list"
+                class="max-h-[21.375rem] mx-2 md:mx-0 overflow-y-scroll space-y-4.5"
+              >
+                <li>
+                  <a
+                    href="/new"
+                    class="flex justify-center items-center bg-white rounded-full h-18 border-2 border-gray-300 transition-colors hover:(bg-green-100 border-green-400) group"
+                  >
+                    <div class="w-8 h-8 flex justify-center items-center mr-2.5">
+                      <img src="/plus.svg" alt="Plus" />
+                    </div>
+                    <span class="text-xl font-bold text-gray-900 group-hover:underline group-focus:underline">
+                      New Room
+                    </span>
+                  </a>
+                </li>
+
+                {data.rooms.map((room) => {
+                  return (
+                    <li key={room.roomId}>
+                      <a
+                        href={new URL(room.roomId.toString(), data.url).href}
+                        class="grid grid-cols-3 items-center bg-white rounded-full h-18 border-2 border-gray-300 transition-colors hover:(bg-gray-100 border-gray-400) group"
+                      >
+                        <div
+                          class="w-12 h-12 bg-cover rounded-3xl ml-3"
+                          style={`background-image: url(${
+                            "https://deno-avatar.deno.dev/avatar/" + room.roomId
+                          })`}
+                        />
+                        <p class="text-xl font-bold text-gray-900 justify-self-center group-hover:underline group-focus:underline">
+                          {room.name}
+                        </p>
+                        <p class="font-medium text-gray-400 mr-8 justify-self-end">
+                          {room.lastMessageAt
+                            ? twas(new Date(room.lastMessageAt).getTime())
+                            : "No messages"}
+                        </p>
+                      </a>
+                    </li>
+                  );
+                })}
+              </ul>
+            ) : (
             <div class="flex justify-center items-center flex-col">
               <a
                 href="/api/login"
@@ -113,7 +179,8 @@ export default define.page(function Home({ data }) {
                 <span>Sign up with Github</span>
               </a>
             </div>
-          )}
+          )
+          }
         </div>
       </div>
     </>
