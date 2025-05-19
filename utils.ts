@@ -4,3 +4,11 @@ import { createDefine } from "fresh";
 export interface State {}
 
 export const define = createDefine<State>();
+
+export interface State {
+  meta: Meta;
+}
+
+export interface Meta {
+  title?: string;
+}

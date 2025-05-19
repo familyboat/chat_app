@@ -1,4 +1,4 @@
-import {Octokit} from "octokit";
+import { Octokit } from "octokit";
 
 export class GitHubApi {
   async getAccessToken(code: string): Promise<string> {
@@ -36,9 +36,9 @@ export class GitHubApi {
     const octokit = new Octokit({
       auth: accessToken,
     });
-    const response = await octokit.request('GET /user');
+    const response = await octokit.request("GET /user");
     if (response.status !== 200) {
-      throw new Error(`Get user data failed: ${response.status}`)
+      throw new Error(`Get user data failed: ${response.status}`);
     }
     const userData = response.data;
 

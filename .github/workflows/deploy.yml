@@ -32,5 +32,3 @@ jobs:
           project: "familyboat-chat-app"
           entrypoint: "main.ts"
           root: "."
-          
-          
