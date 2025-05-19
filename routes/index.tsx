@@ -8,7 +8,7 @@ import twas from "twas";
 export const handler = define.handlers({
   async GET(ctx) {
     ctx.state.meta = {
-      title: "chat app",
+      title: "Chat App",
     };
 
     // Get cookie from request header and parse it
@@ -75,10 +75,15 @@ export default define.page<typeof handler>(function Home({ data }) {
               alt="Deno Logo"
             />
             <span class="block text-3xl font-bold text-black mb-3">
-              Deno Chat
+              Chat App
             </span>
             <span class="block text-lg -mb-1.5">
-              A minimal chat platform template.
+              A toy chat app, modified version of <a 
+                class="font-bold underline"
+              href="https://github.com/denoland/showcase_chat"
+                rel="noopener noreferrer"
+                target="_blank"
+              >deno's showcase_chat</a>
             </span>
             <span class="block text-lg">
               It uses{" "}
