@@ -1,7 +1,6 @@
-# Fresh project
+# Chat app
 
-Your new Fresh project is ready to go. You can follow the Fresh "Getting
-Started" guide here: https://fresh.deno.dev/docs/getting-started
+This is my toy app, modified version of [deno's showcase_chat][showcase_chat] with [latest fresh][fresh], [supabase][supabase], [WebSocket][websocket] and [tailwind][tailwind].
 
 ### Usage
 
@@ -15,3 +14,9 @@ deno task dev
 ```
 
 This will watch the project directory and restart as necessary.
+
+[showcase_chat]: https://github.com/denoland/showcase_chat
+[fresh]: https://fresh.deno.dev
+[websocket]: https://developer.mozilla.org/en-US/docs/Web/API/WebSocket
+[tailwind]: https://tailwindcss.com/
+[supabase]: https://supabase.com
