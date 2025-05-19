@@ -24,8 +24,6 @@ export default function Chat(
   } | null>(null);
 
   useEffect(() => {
-    Notification.requestPermission();
-
     const subscription = client.subscribeMessages(roomId, (msg) => {
       switch (msg.kind) {
         case "isTyping": {
@@ -43,10 +41,6 @@ export default function Chat(
         }
         case "text": {
           addMessage(msg);
-          new Notification(`New message from ${msg.from.name}`, {
-            body: msg.message,
-            icon: msg.from.avatarUrl
-          });
           break
         }
       }
