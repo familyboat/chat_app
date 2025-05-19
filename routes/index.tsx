@@ -5,7 +5,8 @@ import { gitHubApi } from "../communication/github.ts";
 import { databaseLoader } from "../communication/database.ts";
 import twas from "twas";
 
-export const handler = define.handlers(async (ctx) => {
+export const handler = define.handlers({
+  async GET (ctx) {
   ctx.state.meta = {
     title: "chat app",
   };
@@ -52,10 +53,9 @@ export const handler = define.handlers(async (ctx) => {
     rooms: await database.getRooms(),
     url: ctx.url,
   }, {
-    headers: {
-      "Set-Cookie": headers.get("Set-Cookie")!,
-    },
+    headers,
   });
+}
 });
 
 export default define.page<typeof handler>(function Home({ data }) {
