@@ -6,56 +6,56 @@ import { databaseLoader } from "../communication/database.ts";
 import twas from "twas";
 
 export const handler = define.handlers({
-  async GET (ctx) {
-  ctx.state.meta = {
-    title: "chat app",
-  };
+  async GET(ctx) {
+    ctx.state.meta = {
+      title: "chat app",
+    };
 
-  // Get cookie from request header and parse it
-  const maybeAccessToken = getCookies(ctx.req.headers)["deploy_chat_token"];
-  const database = await databaseLoader.getInstance();
-  if (maybeAccessToken) {
-    const user = await database.getUserByAccessToken(maybeAccessToken);
-    if (user) {
-      return page({
-        rooms: await database.getRooms(),
-        url: ctx.url,
-      });
+    // Get cookie from request header and parse it
+    const maybeAccessToken = getCookies(ctx.req.headers)["deploy_chat_token"];
+    const database = await databaseLoader.getInstance();
+    if (maybeAccessToken) {
+      const user = await database.getUserByAccessToken(maybeAccessToken);
+      if (user) {
+        return page({
+          rooms: await database.getRooms(),
+          url: ctx.url,
+        });
+      }
     }
-  }
 
-  // This is an oauth callback request
-  const url = new URL(ctx.req.url);
-  const code = url.searchParams.get("code");
-  if (!code) {
-    return page(null);
-  }
+    // This is an oauth callback request
+    const url = new URL(ctx.req.url);
+    const code = url.searchParams.get("code");
+    if (!code) {
+      return page(null);
+    }
 
-  const accessToken = await gitHubApi.getAccessToken(code);
-  const userData = await gitHubApi.getUserData(accessToken);
+    const accessToken = await gitHubApi.getAccessToken(code);
+    const userData = await gitHubApi.getUserData(accessToken);
 
-  await database.insertUser({
-    userId: userData.userId,
-    userName: userData.userName,
-    accessToken,
-    avatarUrl: userData.avatarUrl,
-  });
+    await database.insertUser({
+      userId: userData.userId,
+      userName: userData.userName,
+      accessToken,
+      avatarUrl: userData.avatarUrl,
+    });
 
-  const headers = new Headers();
-  setCookie(headers, {
-    name: "deploy_chat_token",
-    value: accessToken,
-    maxAge: 60 * 60 * 24 * 7,
-    httpOnly: true,
-  });
+    const headers = new Headers();
+    setCookie(headers, {
+      name: "deploy_chat_token",
+      value: accessToken,
+      maxAge: 60 * 60 * 24 * 7,
+      httpOnly: true,
+    });
 
-  return page({
-    rooms: await database.getRooms(),
-    url: ctx.url,
-  }, {
-    headers,
-  });
-}
+    return page({
+      rooms: await database.getRooms(),
+      url: ctx.url,
+    }, {
+      headers,
+    });
+  },
 });
 
 export default define.page<typeof handler>(function Home({ data }) {

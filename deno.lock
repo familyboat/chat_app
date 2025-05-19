@@ -39,6 +39,7 @@
     "npm:@supabase/postgrest-js@1.19.4": "1.19.4",
     "npm:@supabase/realtime-js@2.11.2": "2.11.2",
     "npm:@supabase/storage-js@2.7.1": "2.7.1",
+    "npm:@twuni/emojify@^1.0.2": "1.0.2",
     "npm:@types/node@*": "22.12.0",
     "npm:autoprefixer@10.4.17": "10.4.17_postcss@8.4.35",
     "npm:cssnano@6.0.3": "6.0.3_postcss@8.4.35",
@@ -601,6 +602,9 @@
     },
     "@trysound/sax@0.2.0": {
       "integrity": "sha512-L7z9BgrNEcYyUYtF+HaEfiS5ebkh9jXqbszz7pC0hRBPaatV0XjSD3+eHrpqFemQfgwiFF0QPIarnIihIDn7OA=="
+    },
+    "@twuni/emojify@1.0.2": {
+      "integrity": "sha512-glI5e+K7HFdJ7ntwdDsVW3hneMxt2+FoTisphorL+3SXpYvRQ0CV2wIMsdzAp+SotBK6ONkRLTiGy+8SN86eHg=="
     },
     "@types/aws-lambda@8.10.149": {
       "integrity": "sha512-NXSZIhfJjnXqJgtS7IwutqIF/SOy1Wz5Px4gUY1RWITp3AYTyuJS4xaXr/bIJY1v15XMzrJ5soGnPM+7uigZjA=="
@@ -1680,6 +1684,7 @@
       "jsr:@std/http@^1.0.16",
       "jsr:@supabase/supabase-js@^2.49.4",
       "npm:@preact/signals@^2.0.4",
+      "npm:@twuni/emojify@^1.0.2",
       "npm:octokit@^4.1.3",
       "npm:preact@^10.26.6",
       "npm:tailwindcss@^3.4.3",

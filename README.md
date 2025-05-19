@@ -1,6 +1,8 @@
 # Chat app
 
-This is my toy app, modified version of [deno's showcase_chat][showcase_chat] with [latest fresh][fresh], [supabase][supabase], [WebSocket][websocket] and [tailwind][tailwind].
+This is my toy app, modified version of [deno's showcase_chat][showcase_chat]
+with [latest fresh][fresh], [supabase][supabase], [WebSocket][websocket] and
+[tailwind][tailwind].
 
 ### Usage
 

@@ -1,6 +1,23 @@
 import { define } from "../utils.ts";
 import { page } from "fresh";
-import {Page} from '../helpers/Page.tsx'
+import { Page } from "../helpers/Page.tsx";
+import AddRoom from "../islands/AddRoom.tsx";
+import { getCookies } from "@std/http";
+
+export const handler = define.handlers({
+  GET(ctx) {
+  // Get cookie from request header and parse it
+  const accessToken = getCookies(ctx.req.headers)["deploy_chat_token"];
+  if (!accessToken) {
+    return Response.redirect(new URL(ctx.req.url).origin);
+  }
+    ctx.state.meta = {
+      title: "New Room | Chat App",
+    };
+
+  return page();
+  }
+})
 
 export default define.page<typeof handler>(function NewRoom() {
   return (
@@ -22,18 +39,9 @@ export default define.page<typeof handler>(function NewRoom() {
             </div>
             <div />
           </div>
+          <AddRoom />
         </div>
       </Page>
     </>
-  )
-})
-
-export const handler = define.handlers({
-  GET(ctx) {
-    ctx.state.meta = {
-      title: "New Room | Chat App"
-    };
-
-    return page()
-  }
-})
+  );
+});
