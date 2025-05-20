@@ -1,9 +1,7 @@
 import {useRef, useState, useReducer, useEffect} from "preact/hooks";
 import twas from "twas";
 import { MessageView, UserView } from "../communication/types.ts";
-import { Client } from "../communication/client.ts";
-
-const client = new Client();
+import { getClient } from "../communication/client.ts";
 
 export default function Chat(
   {roomId, roomName, initialMessages, user}: {
@@ -22,6 +20,7 @@ export default function Chat(
   const [typing, setTyping] = useState<{
     user: UserView, interval: number
   } | null>(null);
+  const [client] = useState(getClient)
 
   useEffect(() => {
     const subscription = client.subscribeMessages(roomId, (msg) => {

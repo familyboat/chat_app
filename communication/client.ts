@@ -66,3 +66,7 @@ export class Client {
     return text;
   }
 }
+
+export function getClient() {
+  return new Client();
+}
